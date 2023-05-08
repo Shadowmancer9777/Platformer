@@ -1,0 +1,58 @@
+import pygame
+
+# initialize Pygame
+pygame.init()
+
+# set up game window
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("My Platform Game")
+
+# set up game loop
+clock = pygame.time.Clock()
+running = True
+
+# set up player variables
+player_width = 50
+player_height = 50
+player_x = 50
+player_y = 500
+player_vel = 5
+player_jump_vel = 10
+player_jumping = False
+
+# main game loop
+while running:
+    # handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    # handle player movement
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and player_x > 0:
+        player_x -= player_vel
+    if keys[pygame.K_RIGHT] and player_x < screen_width - player_width:
+        player_x += player_vel
+    if keys[pygame.K_SPACE] and not player_jumping:
+        player_jumping = True
+        player_y_vel = -player_jump_vel
+    
+    # handle player jumping
+    if player_jumping:
+        player_y += player_y_vel
+        player_y_vel += 1
+        if player_y_vel >= 0:
+            player_jumping = False
+    
+    # draw game objects
+    screen.fill((255, 255, 255))
+    pygame.draw.rect(screen, (0, 0, 255), (player_x, player_y, player_width, player_height))
+    
+    # update display and clock
+    pygame.display.update()
+    clock.tick(60)
+
+# quit Pygame
+pygame.quit()
